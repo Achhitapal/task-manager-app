@@ -6,7 +6,7 @@ const Project = require("./Project");
 const Task = require("./Task");
 const express = require("express");
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const app = express();
 app.use(express.json());
