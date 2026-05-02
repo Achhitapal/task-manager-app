@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 8000;
 
 //SIGNUP
 app.post("/signup",async(req, res) => {
-    try{
+    try{ 
         const {name, email, password, role} = req.body;
 
         if (!name || !email || !password){
