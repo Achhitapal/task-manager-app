@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+
+<h2>Dashboard</h2>
+
+<button onclick="loadTasks()">Load Tasks</button>
+<button onclick="logout()">Logout</button>
+
+<h3>Your Tasks</h3>
+<div id="tasks"></div>
+<div id="stats">
+    <h3>Total Tasks: <span id="total"></span></h3>
+    <h3>Completed: <span id="completed"></span></h3>
+    <h3>Pending: <span id="pending"></span></h3>
+</div>
+
+<script>
+const token = localStorage.getItem("token");
+if (!token) {
+    alert("Please login first");
+    window.location.href = "index.html";
+}
+
+// logout
+function logout() {
+    localStorage.removeItem("token");
+    window.location.href = "index.html";
+}
+
+// load tasks
+async function loadTasks() {
+    try {
+        const res = await fetch("http://127.0.0.1:8000/tasks", {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        });
+
+        const tasks = await res.json();
+        console.log(tasks);
+
+        let total = tasks.length;
+        let completed = tasks.filter(t => t.status === "completed").length;
+        let pending = tasks.filter(t => t.status === "pending").length;
+        document.getElementById("total").innerText = total;
+        document.getElementById("completed").innerText = completed;
+        document.getElementById("pending").innerText = pending;
+
+        const container = document.getElementById("tasks");
+        container.innerHTML = "";
+
+        if (tasks.length === 0) {
+            container.innerHTML = "<p>No tasks found</p>";
+            return;
+        }
+
+        tasks.forEach(task => {
+            const div = document.createElement("div");
+
+            div.style.border = "1px solid black";
+            div.style.margin = "10px";
+            div.style.padding = "10px";
+            div.style.borderRadius = "8px";
+            div.style.backgroundColor = "#f5f5f5";
+
+            div.innerHTML = `
+                <h4>${task.title}</h4>
+                <p>Status: ${task.status}</p>
+            `;
+
+            container.appendChild(div);
+        });
+
+    } catch (err) {
+        console.log(err);
+    }
+}
+</script>
+
+</body>
+</html>

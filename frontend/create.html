@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Task</title>
+</head>
+<body>
+
+<h2>Create Task</h2>
+
+<input id="title" placeholder="Task Title">
+
+<button onclick="createTask()">Create</button>
+
+<script>
+async function createTask() {
+
+    const title = document.getElementById("title").value;
+    const token = localStorage.getItem("token");
+
+    const res = await fetch("http://127.0.0.1:8000/tasks", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify({ title })
+    });
+
+    const data = await res.json();
+
+    alert(data.message);
+}
+</script>
+
+</body>
+</html>
