@@ -108,8 +108,17 @@ const verifyToken = (req, res, next) => {
 
 //DATABASE CONNECTIVITY
 mongoose.connect(MONGO_URI)
-.then(() => console.log("MongoDB connected"))
-.catch(err => console.log(err));
+.then(() => {
+    console.log("MongoDB connected");
+
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+
+})
+.catch((err) => {
+    console.log("MongoDB Error:", err.message);
+});
 
 // TEST ROUTE
 
@@ -241,7 +250,5 @@ app.get("/admin", verifyToken, (req, res) => {
 
 
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+
 
